@@ -1,0 +1,177 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[40]:
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+import statistics
+plt.style.use("seaborn")
+
+
+# In[41]:
+
+
+fronteras=pd.read_csv("/Users/marisolgorostizaga/Desktop/QUANT_TRADING/DATASETS/fronteras.csv")
+
+
+# In[50]:
+
+
+def ejercicio0(df, estado):
+    measure = df["Measure"] == "Pedestrians"
+    df = fronteras[measure]
+    lug = df["Port Name"] == estado
+    df = fronteras[lug]
+    df["Date"] = pd.to_datetime(df["Date"])
+    años = (fronteras["Date"] >= '01/01/2015 00:00:00') & (fronteras["Date"] <= '12/01/2019 00:00:00')
+    df = df[años]
+    meses = df.groupby(df["Date"].dt.strftime("%m"))["Value"].median()
+    meses_m = meses.to_numpy()
+    nombre_meses = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Total"]
+    total = np.append(meses_m, fronteras["Value"].median())
+    plt.bar(nombre_meses, total)
+    plt.show()
+
+
+# In[51]:
+
+
+#MEDIANA
+ejercicio0(df, "Laredo")
+
+
+# In[52]:
+
+
+def ejercicio0_1(df, estado):
+    measure = df["Measure"] == "Pedestrians"
+    df = fronteras[measure]
+    lug = df["Port Name"] == estado
+    df = fronteras[lug]
+    df["Date"] = pd.to_datetime(df["Date"])
+    años = (fronteras["Date"] >= '01/01/2015 00:00:00') & (fronteras["Date"] <= '12/01/2019 00:00:00')
+    df = df[años]
+    meses = df.groupby(df["Date"].dt.strftime("%m"))["Value"].median()
+    meses_m = meses.to_numpy()
+    nombre_meses = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Total"]
+    total = np.append(meses_m, fronteras["Value"].mean())
+    plt.bar(nombre_meses, total)
+    plt.show()
+
+
+# In[53]:
+
+
+#MEAN
+ejercicio0_1(df, "Laredo")
+
+
+# In[34]:
+
+
+fronteras=pd.read_csv("/Users/marisolgorostizaga/Desktop/QUANT_TRADING/DATASETS/fronteras.csv")
+
+
+# In[35]:
+
+
+measure = fronteras["Measure"] == "Pedestrians"
+fronteras = fronteras[measure]
+lugar = fronteras["Port Name"] == "El Paso"
+fronteras = fronteras[lugar]
+fronteras["Date"] = pd.to_datetime(fronteras["Date"])
+años = (fronteras["Date"] >= '01/01/2015 00:00:00') & (fronteras["Date"] <= '12/01/2019 00:00:00')
+fronteras = fronteras[años]
+suma_meses = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].sum()
+max = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].max()
+min = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].min()
+media_rec = (suma_meses - (max + min)) / 3
+media = media_rec.to_numpy()
+valores = fronteras["Value"].to_numpy()
+ordenados = sorted(valores)
+restar_valores = list()
+
+i = 0
+while i in range(6):
+    restar_valores.append(ordenados[i])
+    restar_valores.append(ordenados[(len(ordenados)-1) - i])
+    i = i + 1
+suma1 = sum(ordenados)
+suma2 = sum(restar_valores)
+nombre_meses = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Total"]
+total = np.append(media, (suma1 - suma2) / 48)
+
+plt.bar(nombre_meses, total)
+plt.show()
+
+
+# In[36]:
+
+
+fronteras=pd.read_csv("/Users/marisolgorostizaga/Desktop/QUANT_TRADING/DATASETS/fronteras.csv")
+
+
+# In[49]:
+
+
+measure = fronteras["Measure"] == "Pedestrians"
+fronteras = fronteras[measure]
+
+lugar = fronteras["Port Name"] == "Laredo"
+fronteras = fronteras[lugar]
+
+fronteras["Date"] = pd.to_datetime(fronteras["Date"])
+años = (fronteras["Date"] >= '01/01/2015 00:00:00') & (fronteras["Date"] <= '12/01/2019 00:00:00')
+fronteras = fronteras[años]
+
+max = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].max()
+min = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].min()
+rango = (max + min) / 2
+rango_meses = rango.to_numpy()
+nombre_meses = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Total"]
+max_total = fronteras["Value"].max()
+min_total = fronteras["Value"].min()
+rango_total = (max_total + min_total) / 2
+total = np.append(rango_meses, rango_total)
+
+plt.bar(nombre_meses, total)
+plt.show()
+
+
+# In[38]:
+
+
+fronteras=pd.read_csv("/Users/marisolgorostizaga/Desktop/QUANT_TRADING/DATASETS/fronteras.csv")
+
+
+# In[39]:
+
+
+measure = fronteras["Measure"] == "Pedestrians"
+fronteras = fronteras[measure]
+
+lugar = fronteras["Port Name"] == "El Paso"
+fronteras = fronteras[lugar]
+
+fronteras["Date"] = pd.to_datetime(fronteras["Date"])
+años = (fronteras["Date"] >= '01/01/2015 00:00:00') & (fronteras["Date"] <= '12/01/2019 00:00:00')
+fronteras = fronteras[años]
+
+meses = fronteras.groupby(fronteras["Date"].dt.strftime("%m"))["Value"].mean()
+prom_meses = meses.to_numpy()
+nombre_meses = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12","Total"]
+total = np.append(prom_meses, fronteras["Value"].mean())
+
+plt.bar(nombre_meses, total)
+plt.show()
+
+
+# In[ ]:
+
+
+
+
