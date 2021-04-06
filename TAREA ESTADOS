@@ -1,0 +1,213 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[56]:
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+import statistics
+plt.style.use("seaborn")
+
+
+# In[53]:
+
+
+df=pd.read_csv("/Users/marisolgorostizaga/Desktop/QUANT_TRADING/DATASETS/fronteras.csv")
+
+
+# In[51]:
+
+
+df.head()
+
+
+# In[5]:
+
+
+df["Value"].plot()
+
+
+# In[6]:
+
+
+df.head()
+
+
+# **EJERCICIO 1**
+
+# In[7]:
+
+
+def EJERCICIO1_1(df, estado):
+    df=df[(df["Date"]>="01/01/2018 00:00")&(df["Date"]<="12/01/2018 00:00:00")]
+    df=df[(df["Border"]=='US-Mexico Border')]
+    df=df[(df["Measure"]=='Personal Vehicles')]
+    df=df[(df["State"]==estado)]
+    df["Value"].plot()
+
+
+# In[8]:
+
+
+EJERCICIO1_1(df,"TX")
+
+
+# In[13]:
+
+
+EJERCICIO1_1(df,"CA")
+
+
+# In[14]:
+
+
+EJERCICIO1_1(df,"AZ")
+
+
+# In[15]:
+
+
+EJERCICIO1_1(df,"NM")
+
+
+# In[16]:
+
+
+def EJERCICIO1_2(df, estado):
+    df=df[(df["Date"]>="01/01/2019 00:00")&(df["Date"]<="12/01/2019 00:00:00")]
+    df=df[(df["Border"]=='US-Mexico Border')]
+    df=df[(df["Measure"]=='Personal Vehicles')]
+    df=df[(df["State"]==estado)]
+    df["Value"].plot()
+
+
+# In[17]:
+
+
+EJERCICIO1_2(df,"TX")
+
+
+# In[19]:
+
+
+EJERCICIO1_2(df,"CA")
+
+
+# In[20]:
+
+
+EJERCICIO1_2(df,"NM")
+
+
+# In[21]:
+
+
+EJERCICIO1_2(df,"NM")
+
+
+# In[ ]:
+
+
+
+
+
+# **EJERCICIO 2**
+
+# In[22]:
+
+
+def EJERCICIO2(df, estado):
+    df=df[(df["Date"]>="01/01/2018 00:00")&(df["Date"]<="12/01/2019 00:00:00")]
+    df=df[(df["Border"]=='US-Mexico Border')]
+    df=df[(df["Measure"]=='Pedestrians')]
+    df=df[(df["State"]==estado)]
+    x=df["Value"]
+    y=df["Port Name"]
+    plt.scatter(x,y)
+    plt.show()
+
+
+# In[23]:
+
+
+EJERCICIO2(df,"AZ")
+
+
+# In[24]:
+
+
+EJERCICIO2(df,"TX")
+
+
+# In[25]:
+
+
+EJERCICIO2(df,"CA")
+
+
+# **EJERCICIO 3**
+
+# In[26]:
+
+
+def EJERCICIO3(df, estado):
+    frontera=df["Border"]=="US-Mexico Border"
+    state=df["State"]==estado
+    df["Date"]=pd.to_datetime(df["Date"])
+    date=(df["Date"]>="01/01/2018 00:00")&(df["Date"]<="12/01/2019 00:00")
+    measure=((df["Measure"]=="Personal Vehicles")|(df["Measure"]=="Personal Vehicle Passengers"))
+    df1=df[frontera&measure&state&date]
+    df2=df1.groupby("Port Name")["Value"].sum()
+    ax=df2.plot.bar(x="Port Value", y="Value")
+    plt.show()
+
+
+# In[27]:
+
+
+EJERCICIO3(df, "TX")
+
+
+# In[28]:
+
+
+EJERCICIO3(df, "CA")
+
+
+# In[29]:
+
+
+EJERCICIO3(df, "AZ")
+
+
+# In[30]:
+
+
+def EJERCICIO4(df, estado):
+    df=df[(df["Date"]>="01/01/2018 00:00")&(df["Date"]<="12/01/2019 00:00:00")]
+    df=df[(df["Border"]=='US-Mexico Border')]
+    df=df[(df["Measure"]=='Bus Passengers')]
+    df=df[(df["State"]==estado)]
+    df["Value"].plot(kind="hist", bins=24)
+
+
+# In[31]:
+
+
+EJERCICIO4(df,"AZ")
+
+
+# In[33]:
+
+
+EJERCICIO4(df,"CA")
+
+
+# In[35]:
+
+
+EJERCICIO4(df,"NM")
+
